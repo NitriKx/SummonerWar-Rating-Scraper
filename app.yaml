@@ -1,0 +1,22 @@
+application: summoners-war--1337
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: no
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /scrape
+  script: ScrapperHandler.app
+
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: lxml
+  version: "2.3.5"
