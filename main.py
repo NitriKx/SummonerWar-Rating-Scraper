@@ -1,25 +1,58 @@
-#!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-import webapp2
+import datetime
 
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('Hello world!')
+from flask import Flask
+from src.models.MonsterType import MonsterType
+from src.service.SummonersWarCoScraper import SummonersWarCoScraper
 
-app = webapp2.WSGIApplication([
-    ('/', MainHandler)
-], debug=True)
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def root():
+    return "Please use /monsterName/type"
+
+
+@app.route('/<monster_name>/<type>')
+def get_monster_description(monster_name: str, type: str):
+    parser = SummonersWarCoScraper(monster_name, type)
+    return parser.get_description()
+
+    #metrics = {
+    #    "globalNote": parser.getGlobalNote,
+    #    "dungeonNote": parser.getDungeonNote,
+    #    "arenaOffenceNote": parser.getArenaOffenceNote,
+    #    "arenaDefenseNote": parser.getArenaDefenseNote,
+#
+    #    "globalUserNote": parser.getUserGlobalNote,
+    #    "dungeonUserNote": parser.getUserDungeonNote,
+    #    "arenaOffenceUserNote": parser.getUserArenaOffenceNote,
+    #    "arenaDefenseUserNote": parser.getUserArenaDefenseNote,
+#
+    #    "type": parser.getMonsterType,
+    #    "runesReco" : parser.getRuneRecomendations,
+    #    "awakenName" : parser.getAwakenName,
+    #    "badges": parser.getBadges
+    #}
+#
+    #metriclisttocompute = metric.split(",")
+    #resultascsv = ""
+    #for metrictocompute in metriclisttocompute:
+    #    try:
+    #        resultascsv += metrics[metrictocompute]() + ","
+    #    except:
+    #        resultascsv += ","
+    #resultascsv = resultascsv[:-1]
+#
+    #self.response.write(resultascsv)
+#
+
+if __name__ == '__main__':
+    # This is used when running locally only. When deploying to Google App
+    # Engine, a webserver process such as Gunicorn will serve the app. This
+    # can be configured by adding an `entrypoint` to app.yaml.
+    # Flask's development server will automatically serve static files in
+    # the "static" directory. See:
+    # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
+    # App Engine itself will serve those files as configured in app.yaml.
+    app.run(host='127.0.0.1', port=8080, debug=True)

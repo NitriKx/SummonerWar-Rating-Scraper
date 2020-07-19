@@ -178,3 +178,8 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+# Libraries
+bs4
+soupsieve

@@ -1,0 +1,7 @@
+beautifulsoup4
+flask
+google-cloud-datastore
+google-auth
+requests
+lxml
+requests
